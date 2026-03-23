@@ -1,26 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
 
-//create your first component
 const Home = () => {
+
+	const [users, setUsers] = useState([])
+
+	useEffect(() => {getUsers()}, [])
+	// Pedido Get
+	const getUsers = () => {
+		fetch('https://playground.4geeks.com/todo/users')
+			.then(resp => {
+				if (!resp.ok) throw new Error('error en el pedido')
+				return resp.json()
+			})
+			.then(data => setUsers(data.users))
+			.catch(err => console.log(err))
+	}
+
+	console.log(users)
+
 	return (
 		<div className="text-center">
-            
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+
+
 		</div>
 	);
 };
