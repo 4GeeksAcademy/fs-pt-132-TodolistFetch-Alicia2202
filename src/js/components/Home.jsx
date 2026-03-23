@@ -3,53 +3,76 @@ import React, { useEffect, useState } from "react";
 
 const Home = () => {
 
-	const [users, setUsers] = useState([])
-	const [newUser, setNewUser] = useState('')
+	const [myUser, setMyUser] = useState('Alicia');
+	const [data, setData] = useState([]);//-->Lista de todos
+	const [newTask, setNewTask] = useState('')
+	const url = 'https://playground.4geeks.com/todo'
 
-	useEffect(() => { getUsers() }, [])
-	// Pedido Get
-	const getUsers = () => {
-		fetch('https://playground.4geeks.com/todo/users')
-			.then(resp => {
-				if (!resp.ok) throw new Error('error en el pedido')
-				return resp.json()
-			})
-			.then(data => setUsers(data.users))
-			.catch(err => console.log(err))
+	useEffect(() => { getMyUser() }, [])
+	// Pedido GET
+	const getMyUser = async () => {
+		try {
+			const resp = await fetch(url + '/users/' + myUser)
+			if (resp.status === 404) {
+				throw new Error('404-usuario no encontrado')
+			}
+			const data = await resp.json()
+			setData(data)
+		} catch (err) {
+			createMyUser()
+		}
+
+	}
+	//Pedido POST
+	const createMyUser = async () => {
+		try {
+			const resp = await fetch(url + '/users/' + myUser, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+			});
+			if (!resp.ok) throw new Error('No se pudo crear el usuario')
+			await getMyUser();
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
-	console.log(users)
-
-	//Pedido Post para crear usuario
 
 	const handleChange = e => {
-		setNewUser(e.target.value)
+		setNewTask(e.target.value)
 	}
 
-	const handleSubmit = e => {
+
+	const handleSubmit = async ({label,done}) => {
 		e.preventDefault()
-		fetch('https://playground.4geeks.com/todo/users/' + newUser, {
-			method: "POST",
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: {}
-		})
-			.then(resp => {
-				if (!resp.ok) throw new Error('error en el pedido')
-				return resp.json()
-			})
-			.then(data => {
-				console.log(data)
-				getUsers()
-			})
-			.catch(err => console.log(err))
+		if(newTask)
+		try {
+			const resp = await fetch(url + '/todos/' + myUser, {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					label,
+					done: "is_done"
+				})
+			});
+			if (!resp.ok) throw new Error('Error en el pedido')
+			return resp.json();
+			await getMyUser()
+			setNewTask("")
+		} catch (err) {
+			console.log(err);
+		}
 	}
+	
 	return (
 		<div className="text-center">
 
 			<form onSubmit={handleSubmit}>
-				<input type="text" value={newUser} onChange={handleChange} />
+				<input type="text" value={newTask} onChange={handleChange} />
 				<input type="submit" />
 			</form>
 
@@ -57,6 +80,6 @@ const Home = () => {
 
 		</div>
 	);
-};
+}
 
 export default Home;
