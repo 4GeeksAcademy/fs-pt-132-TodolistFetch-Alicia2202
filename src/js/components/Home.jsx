@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import Form from "./Form";  
+import List from "./List";
 
 
 const Home = () => {
 
 	const [myUser, setMyUser] = useState('Alicia');
 	const [data, setData] = useState([]);//-->Lista de todos
-	const [newTask, setNewTask] = useState('')
+	// const [newTask, setNewTask] = useState('')
+	const [error, setError] = useState('')
 	const url = 'https://playground.4geeks.com/todo'
 
 	useEffect(() => { getMyUser() }, [])
@@ -40,44 +43,54 @@ const Home = () => {
 	}
 
 
-	const handleChange = e => {
-		setNewTask(e.target.value)
-	}
+	// const handleChange = e => {
+	// 	setNewTask(e.target.value)
+	// }
 
 
-	const handleSubmit = async ({label,done}) => {
-		e.preventDefault()
-		if(newTask)
+	const addTask = async (taskLabel) => {
+	
 		try {
+			if (taskLabel.trim() === "") {
+				return setError('Tiene que haber una tarea en la lista')
+			}
+			const formatedData = {
+				label: taskLabel.trim(),
+				is_done: false
+			}
 			const resp = await fetch(url + '/todos/' + myUser, {
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({
-					label,
-					done: "is_done"
-				})
+				body: JSON.stringify(formatedData)
 			});
 			if (!resp.ok) throw new Error('Error en el pedido')
-			return resp.json();
+			// setNewTask("")
 			await getMyUser()
-			setNewTask("")
 		} catch (err) {
 			console.log(err);
 		}
 	}
-	
+
 	return (
-		<div className="text-center">
+		// <div className="text-center">
 
-			<form onSubmit={handleSubmit}>
-				<input type="text" value={newTask} onChange={handleChange} />
-				<input type="submit" />
-			</form>
+		// 	<form onSubmit={handleSubmit}>
+		// 		<input type="text" value={newTask} onChange={handleChange} />
+		// 		<input type="submit" />
+		// 	</form>
 
 
 
+		// </div>
+		<div className="container d-flex flex-column  align-items-center">
+
+			<h1 className="mt-4">Lista de tareas</h1>
+            <Form addTask={addTask} />
+			<List data={data}/>
+			
+			
 		</div>
 	);
 }
