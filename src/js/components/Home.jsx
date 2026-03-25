@@ -88,7 +88,7 @@ const Home = () => {
 			<main className="d-flex flex-column align-items-center w-25">
 			<h1 className="mt-4">Lista de tareas</h1>
             <Form addTask={addTask} />
-			<List data={data} upDateList={getMyUser} />
+			<List data={data} upDateList={getMyUser} checkOk={getMyUser} />
 
 			</main>
 			
