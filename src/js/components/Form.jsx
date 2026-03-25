@@ -7,15 +7,15 @@ const Form = ({ addTask}) => {
         setInputValue(e.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
 		e.preventDefault();
 		addTask(inputValue);
         setInputValue("");
 	};
 
 return (
-    <form onSubmit={handleSubmit}>
-        <input type="text" value={inputValue} onChange={handleChange} placeholder="Escribe tu tarea" className="form-control w-100 w-md-50"/>
+    <form onSubmit={handleSubmit} className="w-100 my-2">
+        <input type="text" value={inputValue} onChange={handleChange} placeholder="Escribe tu tarea" className="form-control bg-light"/>
         <input type="submit" hidden />
     </form>
 )

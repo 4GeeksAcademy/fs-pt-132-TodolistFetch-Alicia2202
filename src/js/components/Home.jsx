@@ -84,11 +84,13 @@ const Home = () => {
 
 
 		// </div>
-		<div className="container d-flex flex-column  align-items-center">
-
+		<div className="container d-flex justify-content-center">
+			<main className="d-flex flex-column align-items-center w-25">
 			<h1 className="mt-4">Lista de tareas</h1>
             <Form addTask={addTask} />
-			<List data={data}/>
+			<List data={data} upDateList={getMyUser} />
+
+			</main>
 			
 			
 		</div>
