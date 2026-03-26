@@ -42,7 +42,7 @@ const List = ({ data, upDateList, checkOk }) => {
                         <div className="col">
                             {task.label}
                         </div>
-                        <div className="col-auto d-flex justify-content-end gap-2">
+                        <div className="col-auto d-flex align-items-end flex-column mb-1">
                             <button type="button" className="btn" onClick={() => deleteList(task.id)}> <i className="fa-regular fa-trash-can text-secondary"></i></button>
                             <button type="button" className="btn" onClick={() => handleDone(task)}><i className={`fa-regular ${task.is_done ? "fa-circle-check text-success" : "fa-circle"}`}></i></button>
                         </div>
