@@ -38,8 +38,8 @@ const List = ({ data, upDateList, checkOk }) => {
                 <li className="list-group-item">No hay tareas, añadir tareas</li>
             ) : (
                 data.todos?.map((task) => (
-                    <li key={task.id} className="row list-group-item d-flex align-items-center task-item w-100">
-                        <div className="col ">
+                    <li key={task.id} className="row list-group-item d-flex align-items-center task-item w-100 task">
+                        <div className="col">
                             {task.label}
                         </div>
                         <div className="col-auto d-flex justify-content-end gap-2">
